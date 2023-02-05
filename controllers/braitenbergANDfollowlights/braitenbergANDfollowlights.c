@@ -151,6 +151,13 @@ int main() {
       
       double speed_forward = (behind - ahead) / 60.0;
       speed_forward = (speed_forward < (MAX_SPEED - 1 - abs(speed_diff))) ? speed_forward : (MAX_SPEED - 1 - abs(speed_diff));
+      
+      if(speed_forward < 0.0){
+        speed_forward = 0.0;
+        if(abs(speed_diff) < 1){
+         speed_diff = 1;
+        }
+      }
   
       /* Set the motor speeds. */
       wb_motor_set_velocity(left_motor, speed_forward + speed_diff + (braintenberg_speed[0] - 3) * 3);
