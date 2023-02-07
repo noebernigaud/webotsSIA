@@ -1,0 +1,11 @@
+version: '3'
+services:
+  follow-light:
+    build: ./follow-light
+    extra_hosts:
+      - host.docker.internal:host-gateway
+  braitenberg:
+    build: ./braitenberg    
+    extra_hosts:
+      - host.docker.internal:host-gateway
+      
