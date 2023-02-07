@@ -1,8 +1,8 @@
 # Rendu projet
 
-## Vidéo de Démonstration
+## [Vidéo de Démonstration (Cliquez sur l'image ou le titre pour voir la video)](https://youtu.be/QyI3-sgjt00)
 
-//video
+[![Watch the video](https://img.youtube.com/vi/QyI3-sgjt00/maxresdefault.jpg)](https://youtu.be/QyI3-sgjt00)
 
 ## Objectif
 Ce projet vise à programmer un controller ordonnant au robot d'avancer en évitant les obstacles et un autre lui ordonnant de se déplacer en direction de la lumière. Il convient ensuite de combiner ces deux comportements, d'abord directement dans un unique controller Webots, puis en isolant les programmes sous forme de micro-services en les assignant chacun à un docker.
