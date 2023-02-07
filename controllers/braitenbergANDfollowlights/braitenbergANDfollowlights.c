@@ -278,49 +278,33 @@ int main() {
         }else{
           send(fd, "\n", 1, 0);
         }
-        //BRAINTENBERG
-        /*int i, j;
-        double braintenberg_speed[2];
-        double sensors_value[MAX_SENSOR_NUMBER];
         
-        for (i = 0; i < num_sensors; i++)
-          sensors_value[i] = wb_distance_sensor_get_value(sensors[i]);
-    
-        for (i = 0; i < 2; i++) {
-          braintenberg_speed[i] = 0.0;
-          for (j = 0; j < num_sensors; j++) {
-            braintenberg_speed[i] += speed_unit * matrix[j][i] * (1.0 - (sensors_value[j] / range));
-          }
-          braintenberg_speed[i] = BOUND(braintenberg_speed[i], -max_speed, max_speed);
-        }*/
-        
-        /* Set the motor speeds. */
         n = recv(fd2, buffer, 256, 0);
-      if (n < 0) {
-        printf("error reading from socket\n");
-      }else{
-        buffer[n] = '\0';
-        double sensors_value[MAX_SENSOR_NUMBER];
-        for (i = 0; i < num_sensors; i++)
-          sensors_value[i] = wb_distance_sensor_get_value(sensors[i]);
-        if (buffer[0] == 'L') {
-          sprintf(buffer, "L,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf\r\n",
-            sensors_value[0],sensors_value[1],sensors_value[2],sensors_value[3],
-            sensors_value[4],sensors_value[5],sensors_value[6],sensors_value[7]);
-          send(fd2, buffer, strlen(buffer), 0);
-        }else if(buffer[0] == 'R'){
-          sscanf(buffer, "R,%lf,%lf\r\n", &braintenberg_speed[0], &braintenberg_speed[1]);
-          sprintf(buffer, "L,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf\r\n",
-            sensors_value[0],sensors_value[1],sensors_value[2],sensors_value[3],
-            sensors_value[4],sensors_value[5],sensors_value[6],sensors_value[7]);
-          printf("L,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf\n",sensors_value[0],sensors_value[1],
-          sensors_value[2],sensors_value[3],sensors_value[4],sensors_value[5],sensors_value[6],sensors_value[7]);
-      
-          printf("R,%lf,%lf \n",braintenberg_speed[0], braintenberg_speed[1]);
-          send(fd2, buffer, strlen(buffer), 0);
-        }
-       }
+        if (n < 0) {
+          printf("error reading from socket\n");
+        }else{
+          buffer[n] = '\0';
+          double sensors_value[MAX_SENSOR_NUMBER];
+          for (i = 0; i < num_sensors; i++)
+            sensors_value[i] = wb_distance_sensor_get_value(sensors[i]);
+          if (buffer[0] == 'L') {
+            sprintf(buffer, "L,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf\r\n",
+              sensors_value[0],sensors_value[1],sensors_value[2],sensors_value[3],
+              sensors_value[4],sensors_value[5],sensors_value[6],sensors_value[7]);
+            send(fd2, buffer, strlen(buffer), 0);
+          }else if(buffer[0] == 'R'){
+            sscanf(buffer, "R,%lf,%lf\r\n", &braintenberg_speed[0], &braintenberg_speed[1]);
+            sprintf(buffer, "L,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf\r\n",
+              sensors_value[0],sensors_value[1],sensors_value[2],sensors_value[3],
+              sensors_value[4],sensors_value[5],sensors_value[6],sensors_value[7]);
+            printf("L,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf\n",sensors_value[0],sensors_value[1],
+            sensors_value[2],sensors_value[3],sensors_value[4],sensors_value[5],sensors_value[6],sensors_value[7]);
         
+            printf("R,%lf,%lf \n",braintenberg_speed[0], braintenberg_speed[1]);
+            send(fd2, buffer, strlen(buffer), 0);
+          }
+         }
+          
         printf("end,%lf,%lf \n",speed_forward, speed_diff);
         wb_motor_set_velocity(left_motor, speed_forward + speed_diff + (braintenberg_speed[0] - 3) * 3);
         wb_motor_set_velocity(right_motor, speed_forward - speed_diff + (braintenberg_speed[1] - 3) * 3);
