@@ -41,6 +41,17 @@
 #define SOCKET_SERVER "127.0.0.1" /* local host or host.docker.internal */
 #define MAX_SPEED 10
 
+#define MAX_SENSOR_NUMBER 16
+#define RANGE (1024 / 2)
+#define BOUND(x, a, b) (((x) < (a)) ? (a) : ((x) > (b)) ? (b) : (x))
+
+static double matrix[MAX_SENSOR_NUMBER][2];
+static int num_sensors;
+static double range;
+static int time_step = 0;
+static double max_speed = 0.0;
+static double speed_unit = 1.0;
+
 int main(int argc, char *argv[]) {
   struct sockaddr_in address;
   struct hostent *server;
@@ -117,32 +128,20 @@ int main(int argc, char *argv[]) {
        &ls0_value, &ls1_value,&ls2_value,&ls3_value,
        &ls4_value,&ls5_value,&ls6_value,&ls7_value);
       
-      double right_total_value = (ls3_value + ls4_value + ls5_value + ls6_value) / 4;
-      double left_total_value = (ls0_value + ls1_value + ls2_value + ls7_value) / 4;
+      int i, j;
+        double braintenberg_speed[2];
+        double sensors_value[MAX_SENSOR_NUMBER];
         
-      double behind = (ls6_value + ls7_value) / 2;
-      double ahead = (ls2_value + ls3_value) / 2;
-        
-      double left_speed = (left_total_value - 20) / 60.0;
-      left_speed = (left_speed < MAX_SPEED) ? left_speed : MAX_SPEED;
-      double right_speed = (right_total_value -20) / 60.0;
-      right_speed = (right_speed < MAX_SPEED) ? right_speed : MAX_SPEED;
-      
-      double speed_diff = left_speed - right_speed;
-      
-      double speed_forward = (behind - ahead) / 60.0;
-      speed_forward = (speed_forward < (MAX_SPEED - 1 - abs(speed_diff))) ? speed_forward : (MAX_SPEED - 1 - abs(speed_diff));
-      
-      if(speed_forward < 0.0){
-        speed_forward = 0.0;
-        if(abs(speed_diff) < 1){
-         speed_diff = 1;
+        for (i = 0; i < num_sensors; i++)
+          sensors_value[i] = wb_distance_sensor_get_value(sensors[i]);
+    
+        for (i = 0; i < 2; i++) {
+          braintenberg_speed[i] = 0.0;
+          for (j = 0; j < num_sensors; j++) {
+            braintenberg_speed[i] += speed_unit * matrix[j][i] * (1.0 - (sensors_value[j] / range));
+          }
+          braintenberg_speed[i] = BOUND(braintenberg_speed[i], -max_speed, max_speed);
         }
-      }
-      //printf("L,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf\n",ls0_value,ls1_value,ls2_value,ls3_value,ls4_value,ls5_value,ls6_value,ls7_value);
-      printf("scanning %lf %lf \n",speed_forward,speed_diff);
-      sprintf(buffer, "R,%lf,%lf \r\n",speed_forward,speed_diff);
-      
       n=send(fd,buffer,strlen(buffer),0);
     }
   }
