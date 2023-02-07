@@ -58,6 +58,20 @@ Webots attend les connexions TCP en localhost sur 10020 puis 10021.
 Des qu'ils sont connectés, le programme attend l'envoi des données. 
 Lorsque les deux controllers ont envoyé des commandes, il recupère ces données, les assemble et bouge le robot puis renvoie les données des sensors.
 
+## Conclusion
+
+C'est un projet minimal viable qui prouve la praticapiliter de controler un robot webots avec deux micro-service dans des container docker.
+A remarquer que webots et compatible avec windows linux et mac, de meme pour docker.
+Donc nous avons une indépendance de l'os utiliser.
+
+## Remarque
+Il peut s'averer de sortir la logique de combainaison dans un autre docker.
+Et donc construire un réseaux inter conteneur docker avec ces exitpoints qui communique avec webots plus que pour récupé des données et lancé les command robot.
+Il est possible de conteneuriser webots mais celui étant une simulation graphique 3d
+il risque dans ce cas avoir des performance problematique sachant que l'utilsation GPU est difficile à mettre en place et limiter sous docker.
+
+
+
 
 
 
