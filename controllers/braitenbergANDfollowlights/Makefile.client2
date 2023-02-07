@@ -1,0 +1,18 @@
+ifeq ($(OS),Windows_NT)
+TARGET = client2.exe
+LIBS=-lws2_32
+CC=gcc
+else
+TARGET = client2
+LIBS=
+endif
+
+.PHONY = build release debug profile
+
+build release debug profile: $(TARGET)
+
+$(TARGET): client2.c
+	$(CC) $(CFLAGS) $< -o $@ $(LIBS)
+
+clean:
+	rm -f client2.o client2 client2.exe

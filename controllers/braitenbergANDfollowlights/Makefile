@@ -80,3 +80,4 @@ include $(WEBOTS_HOME_PATH)/resources/Makefile.include
 
 clients:
 	$(MAKE) -f Makefile.client $(MAKECMDGOALS)
+	$(MAKE) -f Makefile.client2 $(MAKECMDGOALS)
