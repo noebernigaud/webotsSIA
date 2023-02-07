@@ -39,5 +39,32 @@ Des qu'ils sont connecter le program attend l'envois des données.
 Lors les deux ont envoyé des commands.
 Il recupere c'est donner les assemble et bouge le robot puis renvois les données des sensors.
 
+------Noé
+
+# RENDU PROJET SIA
+
+## Vidéo de Démonstration
+
+//video
+
+## Objectif
+Ce projet vise à programmer un controlleur ordonnant au robot d'avancer en évitant les obstacles et un autre lui ordonnant de se déplacer en direction de la lumière. Il convient ensuite de combiner ses deux comportements, d'abord directement dans un unique controlleur Webots, puis en isolant les programmes sous forme de micro-services en les assignant chacun à un docker.
+
+## Execution du projet
+
+- Ouvrir world: khepera2.wbt du projet dans Webots
+- Depuis le terminal aller dans /DockerProject puis executer:
+   - docker-compose build
+   - docker-compose up -d
+
+## Travail effectué
+- Nous avons instancié un monde Webots et mis en place le robot, une lumière facilement déplaçable ainsi que des obstacles pour la démonstration.
+- Le modèle Braitenberg a été utilisé en ajustant les paramètres de celui-ci afin d'appliquer l'algorythme d'évitement d'obstacles.
+- Le controlleur permettant de suivre la lumière fonctionne selon la direction où la lumère et la plus forte - si celle ci est plus forte en avant qu'en arrière, il avance, et vice-versa, et la même loique est appliquée pour les directions droite/gauche.
+- La combinaison des deux algorythmes est faite en laissant au controlleur en charge du suivi de la lumière la charge d'avancer/reculer et influe aussi sur la direction. L'évitement d'obstacle est quant à lui concentré sur la direction,domaine où il a plus de poid que le controlleur de suivi de lumière puisque l'esquive d'obstacle est de nature plus urgente et critique.
+- Nous avons dockerisé les deux controlleurs, qui communiquent alors par des sockets avec le controlleur webots qui lui est en charge de fusionner les entrées des 2 controlleurs. Les deux controlleurs dockerisés sont des microservice - ils sont totalement indépendant et peuvent être deplacé vers d'autres application ou interchangés.
+- Un fichier docker-compose permet le lancement facile des différent dockers avec leurs paramètres.
+
+
 
 
