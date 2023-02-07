@@ -5,55 +5,58 @@
 //video
 
 ## Objectif
-Ce projet vise à programmer un controlleur ordonnant au robot d'avancer en évitant les obstacles et un autre lui ordonnant de se déplacer en direction de la lumière. Il convient ensuite de combiner ses deux comportements, d'abord directement dans un unique controlleur Webots, puis en isolant les programmes sous forme de micro-services en les assignant chacun à un docker.
+Ce projet vise à programmer un controller ordonnant au robot d'avancer en évitant les obstacles et un autre lui ordonnant de se déplacer en direction de la lumière. Il convient ensuite de combiner ces deux comportements, d'abord directement dans un unique controller Webots, puis en isolant les programmes sous forme de micro-services en les assignant chacun à un docker.
 
 ## Execution du projet:
 
 ### Avec Docker:
 
-1) Ouvrir world: khepera2.wbt du projet dans Webots
+1) Ouvrir world: khepera2.wbt de ce projet dans Webots
 
-2) Depuis le terminal aller dans DockerProject puis executer:
+2) Depuis le terminal aller dans DockerProject puis exécuter:
    - docker-compose build
    - docker-compose up -d
 
-### En local:
+### Sans Docker:
 
 1) Ouvrir world: khepera2.wbt du projet dans Webots
 
-2) lors d'un build du controller braitenbergANDfollowlights il est generer directement client.exe et client2.exe que vous retrouvez dans le dosier /controller/braitenbergANDfollowlights/
-d'ici ouvrir deux terminal
+2) Lors d'un build du controller braitenbergANDfollowlights il est généré directement client.exe et client2.exe que vous retrouvez dans le dossier 
+/controller/braitenbergANDfollowlights/ .
+D'ici ouvrir deux terminaux
 - terminal1 ./client
 - terminal2 ./client2
 
 
 ## Travail effectué
-- Nous avons instancié un monde Webots et mis en place le robot, une lumière facilement déplaçable ainsi que des obstacles pour la démonstration.
-- Le modèle Braitenberg a été utilisé en ajustant les paramètres de celui-ci afin d'appliquer l'algorythme d'évitement d'obstacles.
-- Le controlleur permettant de suivre la lumière fonctionne selon la direction où la lumère et la plus forte - si celle ci est plus forte en avant qu'en arrière, il avance, et vice-versa, et la même loique est appliquée pour les directions droite/gauche.
-- La combinaison des deux algorythmes est faite en laissant au controlleur en charge du suivi de la lumière la charge d'avancer/reculer et influe aussi sur la direction. L'évitement d'obstacle est quant à lui concentré sur la direction,domaine où il a plus de poid que le controlleur de suivi de lumière puisque l'esquive d'obstacle est de nature plus urgente et critique.
-- Nous avons dockerisé les deux controlleurs, qui communiquent alors par des sockets avec le controlleur webots qui lui est en charge de fusionner les entrées des 2 controlleurs. Les deux controlleurs dockerisés sont des microservice - ils sont totalement indépendant et peuvent être deplacé vers d'autres application ou interchangés.
-- Un fichier docker-compose permet le lancement facile des différent dockers avec leurs paramètres.
+- Nous avons mis en place le robot khepera2 de webots.
+- Nous avons instancié un monde avec une lumière facilement déplaçable ainsi que des obstacles pour la démonstration.
+- Le modèle Braitenberg a été utilisé en ajustant les paramètres de celui-ci afin d'appliquer l'algorithme d'évitement d'obstacles.
+- Le controller permettant de suivre la lumière fonctionne selon la direction où la lumière est la plus forte - si celle-ci est plus forte en avant qu'en arrière, il avance et inversement. La même logique est appliquée pour les directions droite/gauche.
+- La combinaison des deux algorithmes est faite en laissant principalement au controller, en charge du suivi de la lumière, le rôle d'influencer 
+l'avancée / le reculé. L'évitement d'obstacles est quant à lui concentré sur la rotation, domaine où il a plus de poids que le controller de suivi de lumière puisque l'esquive d'obstacle est de nature plus urgente et critique.
+- Nous avons dockerisé les deux controllers qui communiquent alors par des sockets avec le controller webots.
+Ce dernier est en charge de fusionner les entrées des 2 controllers. Les deux controllers dockerisés sont des microservices - ils sont totalement indépendants et peuvent être deplacés vers d'autres applications ou interchangés.
+- Un fichier docker-compose permet le lancement facile des différents conteneurs dockers avec leurs paramètres.
 
 ## Communication Docker-Webots:
 
-Pour cette partie nous nous sommes inspiré du projet khepera-tcpip
+Pour cette partie nous nous sommes inspirés du projet khepera-tcpip.
 
 ### Partie docker:
 
-Les contenaires Docker utilisent un reseau docker0 avec l'adresse host.docker.internal(adress de docker) qui est connecter au host.
-Ainsi ils peuvent ce connecter en tcp/ip vers host.docker.internal:10020 et host.docker.internal:10021.
-Il request les donner lumiere et de distance du sensor en envoyant L et renvois avec R %fl %fl les double pour metriser le mouvement du robot.
-Pour envoyer et receptioner les donner nous utilisant send(fd, buffer, strlen(buffer), 0); et recv(fd, buffer, 256, 0); 
+Les conteneurs Docker utilisent un réseau docker0 avec l'adresse host.docker.internal(adress de docker) qui est connecté au host.
+Ainsi ils peuvent se connecter en tcp/ip vers host.docker.internal:10020 et host.docker.internal:10021.
+Ils request les données de lumière et de distance des sensors du robot en envoyant L et renvoient avec R %fl %fl les double pour maitriser le mouvement du robot.
+Pour envoyer et réceptionner les données nous utilisons send(fd, buffer, strlen(buffer), 0); et recv(fd, buffer, 256, 0);.
 sscanf permet de distribuer les données depuis le buffer dans les variables.
-sprintf permet de distribuer  les données depuis les variables dans le buffer.
+sprintf permet de distribuer les données depuis les variables dans le buffer.
 
 ### Partie webots
 
-Webots attend connections TCP en localhost sur 10020 puis 10021.
-Des qu'ils sont connecter le program attend l'envois des données. 
-Lors les deux ont envoyé des commands.
-Il recupere c'est donner les assemble et bouge le robot puis renvois les données des sensors.
+Webots attend les connexions TCP en localhost sur 10020 puis 10021.
+Des qu'ils sont connectés, le programme attend l'envoi des données. 
+Lorsque les deux controllers ont envoyé des commandes, il recupère ces données, les assemble et bouge le robot puis renvoie les données des sensors.
 
 
 
