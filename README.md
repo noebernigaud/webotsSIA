@@ -1,8 +1,8 @@
-Rendue projet
+# Rendue projet
 
-Exectution du projet:
+## Exectution du projet:
 
-Avec Docker:
+### Avec Docker:
 
 1) Ouvrir world: khepera2.wbt du projet dans Webots
 
@@ -10,7 +10,7 @@ Avec Docker:
    - docker-compose build
    - docker-compose up -d
 
-En local:
+### En local:
 
 1) Ouvrir world: khepera2.wbt du projet dans Webots
 
@@ -19,13 +19,11 @@ d'ici ouvrir deux terminal
 - terminal1 ./client
 - terminal2 ./client2
 
-Compilation
+## Communication:
 
-Communication:
+Pour cette partie nous nous sommes inspirer du projet khepera-tcpip
 
-pour cette partie nous nous sommes inspirer du projet khepera-tcpip
-
-Parti docker:
+### Parti docker:
 
 Les contenaire docker utilise un reseau docker0 avec l'adresse host.docker.internal(adress de docker) qui est connecter au host.
 Ainsi ils peuvent ce connecter en tcp/ip vers host.docker.internal:10020 et host.docker.internal:10021.
@@ -34,7 +32,7 @@ Pour envoyer et receptioner les donner nous utilisant send(fd, buffer, strlen(bu
 sscanf permet de distribuer les données depuis le buffer dans les variables.
 sprintf permet de distribuer  les données depuis les variables dans le buffer.
 
-Parti webots
+### Parti webots
 
 Webots attend connections TCP en localhost sur 10020 puis 10021.
 Des qu'ils sont connecter le program attend l'envois des données. 
