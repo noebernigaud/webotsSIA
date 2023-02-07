@@ -4,9 +4,10 @@ WORKDIR /app
 
 COPY . .
 
-RUN gcc -Wall client.c -o client
+RUN gcc -Wall braitenberg.c -o braitenberg
 
-ENTRYPOINT [ "/bin/bash" ]
+#ENTRYPOINT [ "/bin/bash" ]
 
+CMD ["./braitenberg"]
 #Build docker build -t webots2 .
-#RUN docker run -it --add-host=host.docker.internal:host-gateway --rm --name iwebots2  webots2
+#RUN docker run --add-host=host.docker.internal:host-gateway --name iwebots2  webots2

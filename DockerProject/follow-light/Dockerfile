@@ -6,7 +6,8 @@ COPY . .
 
 RUN gcc -Wall follow-light.c -o follow-light
 
-ENTRYPOINT [ "/bin/bash" ]
+CMD ["./follow-light"]
+#ENTRYPOINT [ "/bin/bash" ]
 
 #Build docker build -t webots .
-#RUN docker run -it --add-host=host.docker.internal:host-gateway --rm --name iwebots  webots
+#RUN docker run --add-host=host.docker.internal:host-gateway --name iwebots  webots
