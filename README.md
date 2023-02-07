@@ -60,13 +60,13 @@ Lorsque les deux controllers ont envoyé des commandes, il recupère ces donnée
 
 ## Conclusion
 
-C'est un projet minimal viable qui prouve la praticapiliter de controler un robot webots avec deux micro-service dans des container docker.
-A remarquer que webots et compatible avec windows linux et mac, de meme pour docker.
-Donc nous avons une indépendance de l'os utiliser.
+C'est un projet minimal viable qui prouve la praticabilité de controler un robot webots avec deux microservices dans des conteneurs docker.
+Il est à remarquer que webots est compatible avec Windows, Linux et Mac, de même pour docker.
+Donc nous avons une indépendance de l'OS utilisé avec en plus une abstraction de l'OS dans les conteneurs.
 
-## Remarque
-Il peut s'averer de sortir la logique de combainaison dans un autre docker.
-Et donc construire un réseaux inter conteneur docker avec ces exitpoints qui communique avec webots plus que pour récupé des données et lancé les command robot.
+## Remarques
+Il peut s'avérer intéressant de sortir la logique de combinaison dans un autre conteneur docker.
+Et donc construire un réseau inter-conteneur docker avec ses exitpoints qui communiquent avec webots uniquement pour récupérer des données et lancer les commandes sur les robots.
 Il est possible de conteneuriser webots mais celui étant une simulation graphique 3d
 il risque dans ce cas avoir des performance problematique sachant que l'utilsation GPU est difficile à mettre en place et limiter sous docker.
 
