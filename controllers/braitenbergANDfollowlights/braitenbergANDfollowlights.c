@@ -256,7 +256,7 @@ int main() {
           printf("connection closed\n");
           #ifdef _WIN32
             closesocket(fd);
-            ret = WSACleanup();
+            ret = WSACleanup(); 
           #else
             ret = close(fd);
           #endif

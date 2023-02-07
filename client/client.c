@@ -38,7 +38,8 @@
 #endif
 
 #define SOCKET_PORT 10020
-#define SOCKET_SERVER "host.docker.internal" /* local host */
+#define SOCKET_SERVER "host.docker.internal" /* local host or host.docker.internal */
+#define MAX_SPEED 10
 
 int main(int argc, char *argv[]) {
   struct sockaddr_in address;
@@ -95,20 +96,55 @@ int main(int argc, char *argv[]) {
   }
 
   for (;;) {
-    printf("Enter command: ");
-    fflush(stdout);
-    scanf("%255s", buffer);
+    double left_speed, right_speed;
+    const double ls0_value,ls1_value,ls2_value,ls3_value,ls4_value,ls5_value,ls6_value,ls7_value;
+    //printf("Enter command: ");
+    //fflush(stdout);
+    //scanf("%255s", buffer);
     int n = strlen(buffer);
-    buffer[n++] = '\n'; /* append carriage return */
-    buffer[n] = '\0';
-    n = send(fd, buffer, n, 0);
-
-    if (strncmp(buffer, "exit", 4) == 0)
-      break;
-
+    //buffer[n++] = '\n'; /* append carriage return */
+    //buffer[n] = '\0';
+    sprintf(buffer, "L\r\n");
+    n = send(fd, buffer, strlen(buffer), 0);
+    //if (strncmp(buffer, "exit", 4) == 0)
+    //  break;
     n = recv(fd, buffer, 256, 0);
-    buffer[n] = '\0';
-    printf("Answer is: %s", buffer);
+    //buffer[n] = '\0';
+    //printf("Answer is: %s", buffer);
+    if(buffer[0]=='L'){
+      
+      sscanf(buffer, "L,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf\r\n",
+       &ls0_value, &ls1_value,&ls2_value,&ls3_value,
+       &ls4_value,&ls5_value,&ls6_value,&ls7_value);
+      
+      double right_total_value = (ls3_value + ls4_value + ls5_value + ls6_value) / 4;
+      double left_total_value = (ls0_value + ls1_value + ls2_value + ls7_value) / 4;
+        
+      double behind = (ls6_value + ls7_value) / 2;
+      double ahead = (ls2_value + ls3_value) / 2;
+        
+      double left_speed = (left_total_value - 20) / 60.0;
+      left_speed = (left_speed < MAX_SPEED) ? left_speed : MAX_SPEED;
+      double right_speed = (right_total_value -20) / 60.0;
+      right_speed = (right_speed < MAX_SPEED) ? right_speed : MAX_SPEED;
+      
+      double speed_diff = left_speed - right_speed;
+      
+      double speed_forward = (behind - ahead) / 60.0;
+      speed_forward = (speed_forward < (MAX_SPEED - 1 - abs(speed_diff))) ? speed_forward : (MAX_SPEED - 1 - abs(speed_diff));
+      
+      if(speed_forward < 0.0){
+        speed_forward = 0.0;
+        if(abs(speed_diff) < 1){
+         speed_diff = 1;
+        }
+      }
+      //printf("L,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf\n",ls0_value,ls1_value,ls2_value,ls3_value,ls4_value,ls5_value,ls6_value,ls7_value);
+      printf("scanning %lf %lf \n",speed_forward,speed_diff);
+      sprintf(buffer, "R,%lf,%lf \r\n",speed_forward,speed_diff);
+      
+      n=send(fd,buffer,strlen(buffer),0);
+    }
   }
 
 #ifdef _WIN32
