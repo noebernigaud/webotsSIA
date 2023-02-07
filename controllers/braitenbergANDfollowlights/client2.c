@@ -45,7 +45,7 @@
 #define RANGE (1024 / 2)
 #define BOUND(x, a, b) (((x) < (a)) ? (a) : ((x) > (b)) ? (b) : (x))
 
-static double matrix[MAX_SENSOR_NUMBER][2];
+static double matrix[8][2] = {{-2, 4}, {-3, 5}, {-7, 7}, {7, -6}, {5, -4}, {4, -2}, {-0.5, -0.5}, {-0.5, -0.5}};
 static int num_sensors;
 static double range;
 static int time_step = 0;
@@ -123,25 +123,23 @@ int main(int argc, char *argv[]) {
     //buffer[n] = '\0';
     //printf("Answer is: %s", buffer);
     if(buffer[0]=='L'){
-      
+      double sensors_value[MAX_SENSOR_NUMBER];
       sscanf(buffer, "L,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf\r\n",
-       &ls0_value, &ls1_value,&ls2_value,&ls3_value,
-       &ls4_value,&ls5_value,&ls6_value,&ls7_value);
+       &sensors_value[0], &sensors_value[1],&sensors_value[2],&sensors_value[3],
+       &sensors_value[4],&sensors_value[5],&sensors_value[6],&sensors_value[7]);
       
       int i, j;
-        double braintenberg_speed[2];
-        double sensors_value[MAX_SENSOR_NUMBER];
-        
-        for (i = 0; i < num_sensors; i++)
-          sensors_value[i] = wb_distance_sensor_get_value(sensors[i]);
-    
-        for (i = 0; i < 2; i++) {
-          braintenberg_speed[i] = 0.0;
-          for (j = 0; j < num_sensors; j++) {
-            braintenberg_speed[i] += speed_unit * matrix[j][i] * (1.0 - (sensors_value[j] / range));
-          }
-          braintenberg_speed[i] = BOUND(braintenberg_speed[i], -max_speed, max_speed);
+      double braintenberg_speed[2];
+     
+      for (i = 0; i < 2; i++) {
+        braintenberg_speed[i] = 0.0;
+        for (j = 0; j < num_sensors; j++) {
+          braintenberg_speed[i] += speed_unit * matrix[j][i] * (1.0 - (sensors_value[j] / range));
         }
+        braintenberg_speed[i] = BOUND(braintenberg_speed[i], -max_speed, max_speed);
+      }
+      
+      sprintf(buffer, "R,%lf,%lf \r\n",braintenberg_speed[0] , braintenberg_speed[1]);
       n=send(fd,buffer,strlen(buffer),0);
     }
   }
