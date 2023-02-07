@@ -32,11 +32,11 @@ D'ici ouvrir deux terminaux
 - Nous avons mis en place le robot khepera2 de webots.
 - Nous avons instancié un monde avec une lumière facilement déplaçable ainsi que des obstacles pour la démonstration.
 - Le modèle Braitenberg a été utilisé en ajustant les paramètres de celui-ci afin d'appliquer l'algorithme d'évitement d'obstacles.
-- Le controller permettant de suivre la lumière fonctionne selon la direction où la lumière est la plus forte - si celle-ci est plus forte en avant qu'en arrière, il avance et inversement. La même logique est appliquée pour les directions droite/gauche.
-- La combinaison des deux algorithmes est faite en laissant principalement au controller, en charge du suivi de la lumière, le rôle d'influencer 
-l'avancée / le reculé. L'évitement d'obstacles est quant à lui concentré sur la rotation, domaine où il a plus de poids que le controller de suivi de lumière puisque l'esquive d'obstacle est de nature plus urgente et critique.
-- Nous avons dockerisé les deux controllers qui communiquent alors par des sockets avec le controller webots.
-Ce dernier est en charge de fusionner les entrées des 2 controllers. Les deux controllers dockerisés sont des microservices - ils sont totalement indépendants et peuvent être deplacés vers d'autres applications ou interchangés.
+- Le controller permettant de suivre la lumière fonctionne selon la direction où la luminosité reçue sur les capteurs est la plus forte. Si celle-ci est plus forte en avant qu'en arrière, il avance, et inversement. La même logique est appliquée pour les directions droite/gauche.
+- La combinaison des deux algorithmes est faite en laissant principalement au controlleur en charge du suivi de la lumière le rôle d'influencer 
+l'avancée / le reculé. L'évitement d'obstacles est quant à lui concentré sur la rotation du robot, domaine où il a plus de poids que le controller de suivi de lumière puisque l'esquive d'obstacle est de nature plus urgente et critique.
+- Nous avons dockerisé les deux controllers qui communiquent alors par des sockets tcp/ip avec le controller webots (plus de détails dans la section suivante).
+Ce dernier est en charge de fusionner les entrées des 2 controlleurs. Les deux controllers dockerisés sont des microservices - ils sont totalement indépendants et peuvent être deplacés vers d'autres applications ou interchangés.
 - Un fichier docker-compose permet le lancement facile des différents conteneurs dockers avec leurs paramètres.
 
 ## Communication Docker-Webots:
@@ -60,15 +60,11 @@ Lorsque les deux controllers ont envoyé des commandes, il recupère ces donnée
 
 ## Conclusion
 
-C'est un projet minimal viable qui prouve la praticabilité de controler un robot webots avec deux microservices dans des conteneurs docker.
-Il est à remarquer que webots est compatible avec Windows, Linux et Mac, de même pour docker.
-Donc nous avons une indépendance de l'OS utilisé avec en plus une abstraction de l'OS dans les conteneurs.
+Ce projet démontre la possibilité de combiner des comportements différents pour le contrôle d'un robot afin d'obtenir en résultat un comportement plus complexe. En implémentant les comportements individuels sous forme de microservices, nous donnons à l'architecture une grande clarté, une grande flexibilité, et permettons le changement dynamique des comportements utilisés.
 
 ## Remarques
-Il peut s'avérer intéressant de sortir la logique de combinaison dans un autre conteneur docker.
-Et donc construire un réseau inter-conteneur docker avec ses exitpoints qui communiquent avec webots uniquement pour récupérer des données et lancer les commandes sur les robots.
-Il est possible de conteneuriser webots mais celui étant une simulation graphique 3d
-il risque dans ce cas avoir des performance problematique sachant que l'utilsation GPU est difficile à mettre en place et limiter sous docker.
+- Il pourrait s'avérer intéressant de sortir la logique de combinaison, actuellementeffectué dans le controlleur Webots, dans un autre conteneur docker. Et donc construire un réseau inter-conteneur docker avec ses exitpoints qui communiquent avec webots uniquement pour récupérer des données et lancer les commandes sur les robots.
+- Il est possible de conteneuriser webots mais celui étant une simulation graphique 3d il y a dans ce cas des performances fortement ralenties sachant que l'utilsation GPU est difficile à mettre en place et limitée sous docker.
 
 
 
