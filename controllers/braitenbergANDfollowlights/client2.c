@@ -37,7 +37,7 @@
 #include <unistd.h>
 #endif
 
-#define SOCKET_PORT 10020
+#define SOCKET_PORT 10021
 #define SOCKET_SERVER "127.0.0.1" /* local host or host.docker.internal */
 #define MAX_SPEED 10
 
