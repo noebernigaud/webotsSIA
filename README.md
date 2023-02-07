@@ -23,6 +23,8 @@ Compilation
 
 Communication:
 
+pour cette partie nous nous sommes inspirer du projet khepera-tcpip
+
 Parti docker:
 
 Les contenaire docker utilise un reseau docker0 avec l'adresse host.docker.internal(adress de docker) qui est connecter au host.
@@ -35,8 +37,9 @@ sprintf permet de distribuer  les données depuis les variables dans le buffer.
 Parti webots
 
 Webots attend connections TCP en localhost sur 10020 puis 10021.
-Des qu'il sont connecter il attend une demande lors que les deux envois des commands.
-Il recupere c'est donner et renvois celle des sensors.
+Des qu'ils sont connecter le program attend l'envois des données. 
+Lors les deux ont envoyé des commands.
+Il recupere c'est donner les assemble et bouge le robot puis renvois les données des sensors.
 
 
 
