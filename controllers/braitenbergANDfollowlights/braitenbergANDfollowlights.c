@@ -259,8 +259,8 @@ int main() {
           sscanf(buffer, "R,%lf,%lf\r\n", &speed_forward, &speed_diff);
           sprintf(buffer, "L,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf\r\n",
             ls0_value,ls1_value,ls2_value,ls3_value,ls4_value,ls5_value,ls6_value,ls7_value);
-          //printf("L,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf\n",ls0_value,ls1_value,ls2_value,ls3_value,ls4_value,ls5_value,ls6_value,ls7_value);      
-          //printf("R,%lf,%lf \n",speed_forward, speed_diff);
+          printf("L,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf\n",ls0_value,ls1_value,ls2_value,ls3_value,ls4_value,ls5_value,ls6_value,ls7_value);      
+          printf("R,%lf,%lf \n",speed_forward, speed_diff);
           send(fd, buffer, strlen(buffer), 0); 
         }else if (strncmp(buffer, "exit", 4) == 0) {
           printf("connection closed\n");
@@ -320,9 +320,8 @@ int main() {
           send(fd2, buffer, strlen(buffer), 0);
         }
        }
-
         
-        
+        printf("end,%lf,%lf \n",speed_forward, speed_diff);
         wb_motor_set_velocity(left_motor, speed_forward + speed_diff + (braintenberg_speed[0] - 3) * 3);
         wb_motor_set_velocity(right_motor, speed_forward - speed_diff + (braintenberg_speed[1] - 3) * 3);
       }
