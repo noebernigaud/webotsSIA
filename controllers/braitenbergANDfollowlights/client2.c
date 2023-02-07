@@ -49,7 +49,7 @@ static double matrix[8][2] = {{-2, 4}, {-3, 5}, {-7, 7}, {7, -6}, {5, -4}, {4, -
 static int num_sensors;
 static double range;
 static int time_step = 0;
-static double max_speed = 0.0;
+static double max_speed = 10.0;
 static double speed_unit = 1.0;
 
 int main(int argc, char *argv[]) {
