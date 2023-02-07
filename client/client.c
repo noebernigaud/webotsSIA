@@ -38,7 +38,7 @@
 #endif
 
 #define SOCKET_PORT 10020
-#define SOCKET_SERVER "127.0.0.1" /* local host */
+#define SOCKET_SERVER "host.docker.internal" /* local host */
 
 int main(int argc, char *argv[]) {
   struct sockaddr_in address;
