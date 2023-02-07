@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY . .
 
-RUN gcc -Wall client.c -o client
+RUN gcc -Wall follow-light.c -o follow-light
 
 ENTRYPOINT [ "/bin/bash" ]
 
