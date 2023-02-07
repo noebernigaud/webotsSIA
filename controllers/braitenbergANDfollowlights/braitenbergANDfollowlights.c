@@ -33,7 +33,7 @@
 #define TIMESTEP 250
 
 static int fd;
-static int fd2; 
+static int fd2;
 static fd_set rfds;
 static fd_set rfds2;
 
