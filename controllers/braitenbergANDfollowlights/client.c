@@ -104,19 +104,10 @@ int main(int argc, char *argv[])
   {
     double left_speed, right_speed;
     const double ls0_value, ls1_value, ls2_value, ls3_value, ls4_value, ls5_value, ls6_value, ls7_value;
-    // printf("Enter command: ");
-    // fflush(stdout);
-    // scanf("%255s", buffer);
     int n = strlen(buffer);
-    // buffer[n++] = '\n'; /* append carriage return */
-    // buffer[n] = '\0';
     sprintf(buffer, "L\r\n");
     n = send(fd, buffer, strlen(buffer), 0);
-    // if (strncmp(buffer, "exit", 4) == 0)
-    //   break;
     n = recv(fd, buffer, 256, 0);
-    // buffer[n] = '\0';
-    // printf("Answer is: %s", buffer);
     if (buffer[0] == 'L')
     {
 

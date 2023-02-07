@@ -46,8 +46,8 @@
 #define BOUND(x, a, b) (((x) < (a)) ? (a) : ((x) > (b)) ? (b) : (x))
 
 static double matrix[8][2] = {{-2, 4}, {-3, 5}, {-7, 7}, {7, -6}, {5, -4}, {4, -2}, {-0.5, -0.5}, {-0.5, -0.5}};
-static int num_sensors;
-static double range;
+static int num_sensors = 8;
+static double range = RANGE;
 static int time_step = 0;
 static double max_speed = 10.0;
 static double speed_unit = 1.0;
@@ -107,21 +107,10 @@ int main(int argc, char *argv[]) {
   }
 
   for (;;) {
-    double left_speed, right_speed;
-    const double ls0_value,ls1_value,ls2_value,ls3_value,ls4_value,ls5_value,ls6_value,ls7_value;
-    //printf("Enter command: ");
-    //fflush(stdout);
-    //scanf("%255s", buffer);
     int n = strlen(buffer);
-    //buffer[n++] = '\n'; /* append carriage return */
-    //buffer[n] = '\0';
     sprintf(buffer, "L\r\n");
     n = send(fd, buffer, strlen(buffer), 0);
-    //if (strncmp(buffer, "exit", 4) == 0)
-    //  break;
     n = recv(fd, buffer, 256, 0);
-    //buffer[n] = '\0';
-    //printf("Answer is: %s", buffer);
     if(buffer[0]=='L'){
       double sensors_value[MAX_SENSOR_NUMBER];
       sscanf(buffer, "L,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf\r\n",
