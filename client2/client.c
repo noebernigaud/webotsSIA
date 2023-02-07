@@ -114,8 +114,6 @@ int main(int argc, char *argv[])
 
   for (;;)
   {
-    double left_speed, right_speed;
-    const double ls0_value, ls1_value, ls2_value, ls3_value, ls4_value, ls5_value, ls6_value, ls7_value;
     // printf("Enter command: ");
     // fflush(stdout);
     // scanf("%255s", buffer);
